@@ -1,5 +1,7 @@
 language: generic
-sudo: required
+dist: xenial
+os:
+  - linux
 services:
   - docker
 
@@ -8,3 +10,17 @@ before_install:
 
 script:
   - docker run -e CI=true jmacdonald/docker-react npm run test
+
+deploy:
+  provider: elasticbeanstalk
+  region: "ca-central-1"
+  app: "docker-react"
+  env: "DockerReact-env"
+  bucket_name: "elasticbeanstalk-ca-central-1-060373546455"
+  bucket_path: "docker-react"
+  on:
+    branch: master
+
+access_key_id: "$AWS_ACCESS_KEY"
+secret_access_key:
+  secure: "$AWS_SECRET_KEY"
